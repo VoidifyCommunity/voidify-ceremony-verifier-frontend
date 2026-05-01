@@ -31,6 +31,34 @@ RUN npx nuxt prepare
 
 RUN npm run generate
 
+COPY reference/ /app/reference/
+RUN test -s /app/reference/style.DpOu6hTD.css
+
+ENV TARGET_BUILD_ID=96ee26d3-8b44-4426-8e30-26e6fb08a629
+ENV TARGET_BUILD_TS=1777566778849
+ENV TARGET_CSS_HASH=DpOu6hTD
+
+RUN cd .output/public && \
+    NEW_BUILD_ID=$(basename _nuxt/builds/meta/*.json .json) && \
+    NEW_CSS_HASH=$(basename _nuxt/style.*.css .css | sed 's|style\.||') && \
+    for entry in 'index.html:1777566799930' '200.html:1777566799929' '404.html:1777566799930'; do \
+        f=${entry%%:*} ; \
+        target_html_ts=${entry##*:} ; \
+        html_ts=$(grep -oE '[0-9]{13}' "$f" | head -1) ; \
+        sed -i \
+            -e "s|$NEW_BUILD_ID|$TARGET_BUILD_ID|g" \
+            -e "s|$html_ts|$target_html_ts|g" \
+            -e "s|style\\.$NEW_CSS_HASH\\.css|style.$TARGET_CSS_HASH.css|g" \
+            "$f" ; \
+    done && \
+    rm _nuxt/style.*.css && \
+    cp /app/reference/style.${TARGET_CSS_HASH}.css _nuxt/style.${TARGET_CSS_HASH}.css && \
+    printf '{"id":"%s","timestamp":%s}' "$TARGET_BUILD_ID" "$TARGET_BUILD_TS" \
+        > _nuxt/builds/latest.json && \
+    rm -f _nuxt/builds/meta/*.json && \
+    printf '{"id":"%s","timestamp":%s,"prerendered":[]}' "$TARGET_BUILD_ID" "$TARGET_BUILD_TS" \
+        > _nuxt/builds/meta/${TARGET_BUILD_ID}.json
+
 RUN ipfs add --cid-version 1 --quieter --only-hash --recursive ./.output/public > ipfs_hash.txt
 RUN cat ipfs_hash.txt
 

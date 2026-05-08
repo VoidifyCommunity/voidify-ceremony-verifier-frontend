@@ -15,7 +15,7 @@ RUN wget -qO - https://dist.ipfs.tech/kubo/v0.29.0/kubo_v0.29.0_linux-amd64.tar.
 RUN ipfs init
 
 ENV GIT_REPOSITORY=https://github.com/VoidifyCommunity/voidify-ceremony-frontend.git
-ENV GIT_COMMIT_HASH=9e76ce7cd1154eb61f5afa81a4cee8384e3301fc
+ENV GIT_COMMIT_HASH=c53c84477793e04895b16a2d837c1fa757e8673b
 
 RUN mkdir /app/
 WORKDIR /app

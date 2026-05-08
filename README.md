@@ -36,7 +36,7 @@ Open https://app.ens.domains/ceremony.voidifycto.eth in a browser and check the
 You can also open that CID directly through any public IPFS gateway, for
 example dweb.link:
 
-> https://bafybeid46upxjefd6v2eieyrpm7zjn3dbyeesxb2kg2xjmryedeahlu7li.ipfs.dweb.link/
+> https://bafybeiec5vv7fbsabjkaojjbra7hlxwmk4ia5f7am5jisl6ic2ydn6uxly.ipfs.dweb.link/
 
 A match means the deployed site is byte-identical to the build this Dockerfile
 reproduces from the pinned GitHub commit.
